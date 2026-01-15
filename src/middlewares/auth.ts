@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express"
-import { verify } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 
 import { env } from "@/env"
 import { prisma } from "@/lib/prisma"
@@ -23,7 +23,7 @@ export async function auth(
       throw new ClientError("No token provided", 401)
     }
 
-    const { sub: id } = verify(token, env.JWT_SECRET) as { sub: string }
+    const { sub: id } = jwt.verify(token, env.JWT_SECRET) as { sub: string }
 
     const user = await prisma.user.findUnique({
       where: { id },

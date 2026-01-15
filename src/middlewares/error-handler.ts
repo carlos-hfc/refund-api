@@ -3,7 +3,7 @@ import { ZodError } from "zod"
 
 import { ClientError } from "@/utils/client-error"
 
-export const errorHandler: ErrorRequestHandler = (error, _, response) => {
+export const errorHandler: ErrorRequestHandler = (error, _, response, next) => {
   if (error instanceof ClientError) {
     return response.status(error.statusCode).json(error)
   }
