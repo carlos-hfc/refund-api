@@ -23,6 +23,7 @@ enum Category {
 model User {
   id        String   @id @default(uuid())
   name      String
+  password  String
   email     String   @unique
   role      UserRole @default(employee)
   createdAt DateTime @default(now())
