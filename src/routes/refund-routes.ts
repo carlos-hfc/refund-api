@@ -5,6 +5,7 @@ import { validationSchema } from "@/middlewares/validation-schema"
 import { verifyUserRole } from "@/middlewares/verify-user-role"
 import { createRefundBodySchema } from "@/schemas/create-refund-schema"
 import { listRefundsQuerySchema } from "@/schemas/list-refunds-schema"
+import { showRefundParamSchema } from "@/schemas/show-refund-schema"
 
 export const refundRoutes = Router()
 
@@ -25,4 +26,12 @@ refundRoutes.get(
     query: listRefundsQuerySchema,
   }),
   refundController.list,
+)
+refundRoutes.get(
+  "/:id",
+  verifyUserRole("manager", "employee"),
+  validationSchema({
+    params: showRefundParamSchema,
+  }),
+  refundController.show,
 )

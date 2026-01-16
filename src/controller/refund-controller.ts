@@ -3,6 +3,8 @@ import { Request, Response } from "express"
 import { prisma } from "@/lib/prisma"
 import { CreateRefundBodySchema } from "@/schemas/create-refund-schema"
 import { ListRefundsQuerySchema } from "@/schemas/list-refunds-schema"
+import { ShowRefundParamSchema } from "@/schemas/show-refund-schema"
+import { ClientError } from "@/utils/client-error"
 
 export class RefundController {
   async list(
@@ -53,6 +55,27 @@ export class RefundController {
         totalRecords,
       },
     })
+  }
+
+  async show(request: Request<ShowRefundParamSchema>, response: Response) {
+    const { id } = request.params
+
+    const refund = await prisma.refund.findUnique({
+      where: { id },
+      include: {
+        user: {
+          omit: {
+            password: true,
+          },
+        },
+      },
+    })
+
+    if (!refund) {
+      throw new ClientError("Refund not found", 404)
+    }
+
+    return response.json(refund)
   }
 
   async create(
