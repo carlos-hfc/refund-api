@@ -5,14 +5,16 @@ interface Schema {
   query?: z.ZodObject<any, any>
   body?: z.ZodObject<any, any>
   params?: z.ZodObject<any, any>
+  file?: z.ZodObject<any, any>
 }
 
-export function validationSchema({ body, params, query }: Schema) {
+export function validationSchema({ body, params, query, file }: Schema) {
   return (request: Request, response: Response, next: NextFunction) => {
     try {
       if (params) params.parse(request.params)
       if (query) query.parse(request.query)
       if (body) body.parse(request.body)
+      if (file) file.parse(request.file)
 
       next()
     } catch (error) {
