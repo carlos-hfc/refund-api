@@ -33,6 +33,6 @@ export class SessionController {
       expiresIn: "1d",
     })
 
-    return response.json({ token })
+    return response.json({ token, user })
   }
 }
